@@ -30,7 +30,7 @@ EOF
 ```
 ## Install MetalLB
 ```
-helm repo add metallb https://urldefense.com/v3/__https://metallb.github.io/metallb__;!!LpKI!ikQSGqw5ta7yAZuzxAT0e_VAhKpheYbRoinymh0DBGO9Tv6Zq9_07F6QQwIPBFvD28eZBbZ3nzyi7ce3oy4y$ [metallb[.]github[.]io]
+helm repo add metallb https://metallb.github.io/metallb
 helm install metallb metallb/metallb --wait --timeout 15m --namespace metallb-system --create-namespace
 ```
 ### Configure MetalLB. Ensure the IPAM range is a single IP and is that of the underlying host.

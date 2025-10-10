@@ -2,6 +2,9 @@
 ```
 sudo su
 sudo apt-get update -y
+```
+Install the packages
+```
 sudo apt-get install build-essential procps curl file git zip unzip sshpass jq -y
 sudo apt-get install -y docker.io
 sudo systemctl start docker

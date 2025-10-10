@@ -1,3 +1,20 @@
+## Install pre-requisites
+```
+sudo su
+sudo apt-get update -y
+sudo apt-get install build-essential procps curl file git zip unzip sshpass jq -y
+sudo apt-get install -y docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo chmod +x kubectl
+sudo mv ./kubectl /usr/local/bin/kubectl
+curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.30.0/kind-linux-amd64
+chmod +x ./kind
+sudo mv ./kind /usr/local/bin/kind
+``
+
 ## Create a KinD cluster with 1 master and 2 worker nodes. Extra port mappings are provided to run Ingress services that map local host ports to the Ingress controller service port. The API server IP is that of the underlying host itself.
 ```
 kind create cluster --config=- << EOF

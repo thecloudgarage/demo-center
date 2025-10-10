@@ -49,7 +49,7 @@ nodes:
 - role: worker
 - role: worker
 networking:
-  apiServerAddress: "192.168.1.152"
+  apiServerAddress: "$localIP"
   apiServerPort: 6443
 EOF
 ```
@@ -68,7 +68,7 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-  - 192.168.1.152-192.168.1.152
+  - $localIP-$localIP
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
@@ -80,7 +80,7 @@ EOF
 ## Install the NGINX Ingress controller with nodeSelector
 ```
 kubectl apply -f https://raw.githubusercontent.com/thecloudgarage/demo-center/refs/heads/main/kind-cluster/nginx-ingress-controller.yaml
-``
+```
 ## Deploy a sample app with Ingress
 ```
 cat <<EOF | kubectl apply -f -

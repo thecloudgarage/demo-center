@@ -14,7 +14,11 @@ curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.30.0/kind-linux-amd64
 chmod +x ./kind
 sudo mv ./kind /usr/local/bin/kind
 ```
-
+## Store the IP address of the ubuntu host as a variable
+```
+localIP=$(ip route get 1 | awk '{print $(NF-2);exit}')
+echo $localIP
+```
 ## Create a KinD cluster with 1 master and 2 worker nodes. 
 Note: Extra port mappings are provided to run Ingress services that map local host ports to the Ingress controller service port. The API server IP is that of the underlying host itself.
 ```

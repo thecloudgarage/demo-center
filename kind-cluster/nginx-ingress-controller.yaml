@@ -508,6 +508,7 @@ spec:
       nodeSelector:
         kubernetes.io/os: linux
         node-role.kubernetes.io/control-plane:
+        ingress-ready: true
       serviceAccountName: ingress-nginx
       terminationGracePeriodSeconds: 0
       tolerations:

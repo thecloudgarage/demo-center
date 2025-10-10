@@ -70,6 +70,10 @@ metadata:
   namespace: metallb-system
 EOF
 ```
+## Install the NGINX Ingress controller with nodeSelector
+```
+kubectl apply -f https://raw.githubusercontent.com/thecloudgarage/demo-center/refs/heads/main/kind-cluster/nginx-ingress-controller.yaml
+``
 ## Deploy a sample app with Ingress
 ```
 cat <<EOF | kubectl apply -f -

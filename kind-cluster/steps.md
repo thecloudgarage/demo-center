@@ -107,7 +107,8 @@ spec:
         app: hello-world
     spec:
       containers:
-      - image: gcr.io/google-samples/node-hello:1.0
+#      - image: gcr.io/google-samples/node-hello:1.0
+      - image: us-docker.pkg.dev/google-samples/containers/gke/hello-app:1.0
         name: hello-world
         ports:
         - containerPort: 8080

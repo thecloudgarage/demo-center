@@ -73,69 +73,68 @@ helm install haproxy haproxytech/kubernetes-ingress --namespace haproxy --create
 ```
 Test Ingress
 ```
-kubectl --namespace default create deployment echoserver --image k8s.gcr.io/echoserver:1.3
-kubectl --namespace default expose deployment echoserver --port=8080
-kubectl --namespace default create ingress echoserver \
-  --class=haproxy \
-  --rule="echoserver.local/*=echoserver:8080,tls"
-curl -k https://echoserver.local
-wget -qO- --no-check-certificate https://echoserver.local
-
 cat <<EOF | kubectl apply -f -
-apiVersion: apps/v1 
-kind: Deployment 
-metadata: 
-  labels: 
-    run: app 
-  name: app 
-spec: 
-  replicas: 1 
-  selector: 
-    matchLabels: 
-      run: app 
-  template: 
-    metadata: 
-      labels: 
-        run: app 
-    spec: 
-      containers: 
-      - name: app 
-        image: errm/versions:0.0.1 
-        ports: 
-        - containerPort: 3000 
-        readinessProbe: 
-          httpGet: 
-            path: / 
-            port: 3000 
-          initialDelaySeconds: 5 
-          periodSeconds: 5 
-          successThreshold: 1
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hello-world
 ---
-apiVersion: v1 
-kind: Service 
-metadata: 
-  name: app-service 
-spec: 
-  selector: 
-    run: app 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: hello-world
+  name: hello-world
+  namespace: hello-world
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+    spec:
+      containers:
+      - image: us-docker.pkg.dev/google-samples/containers/gke/hello-app:1.0
+        name: hello-world
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-world
+  namespace: hello-world
+spec:
+  selector:
+    app: hello-world
   ports:
-  - name: http 
-    port: 80 
-    protocol: TCP 
-    targetPort: 3000
+    - port: 80
+      targetPort: 8080
 ---
-apiVersion: networking.k8s.io/v1beta1 
-kind: Ingress 
-metadata: 
-  name: app-ingress 
-spec: 
-  rules: 
-  - http: 
-      paths: 
-      - path: / 
-        backend: 
-          serviceName: app-service 
-          servicePort: 80
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hello-world-ingress
+  namespace: hello-world
+spec:
+  ingressClassName: haproxy
+  rules:
+  - host: hello-server.local
+    http:
+      paths:
+      - backend:
+          service:
+            name: hello-world
+            port:
+              number: 80
+        path: /
+        pathType: prefix
+  tls:
+  - hosts:
+    - hello-server.local
 EOF
 ```
 Metrics server

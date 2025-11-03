@@ -67,6 +67,7 @@ helm install haproxy haproxytech/kubernetes-ingress --namespace haproxy --create
 ```
 Test Ingress
 ```
+cat <<EOF | kubectl apply -f -
 apiVersion: networking.k8s.io/v1beta1 
 kind: Ingress 
 metadata: 
@@ -80,6 +81,7 @@ spec:
         backend: 
           serviceName: app-service 
           servicePort: 80
+EOF
 ```
 Metrics server
 ```

@@ -24,7 +24,7 @@ sudo su
 ```
 Start minikube
 ```
-minikube start -p dapo --cni=calico --driver=docker --force
+minikube start -p dapo --cni=calico --driver=docker --force --cpus=all
 minikube -p dapo addons enable metallb
 ```
 MetalLB

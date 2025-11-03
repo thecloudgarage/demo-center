@@ -7,7 +7,7 @@ sudo apt-get update -y
 ```
 Install prerequisites
 ```
-sudo apt-get install build-essential procps curl file git zip unzip sshpass jq -y
+sudo apt-get install build-essential procps curl file git zip unzip sshpass jq open-iscsi nfs-common -y
 sudo apt-get install -y docker.io
 sudo systemctl start docker
 sudo systemctl enable docker

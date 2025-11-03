@@ -26,6 +26,8 @@ Start minikube
 ```
 minikube start -p dapo --cni=calico --driver=docker --force --cpus=all
 minikube -p dapo addons enable metallb
+minikube -p dapo addons configure metallb
+#provide the range (possibly 192.168.49.100 and end 192.168.49.110) 
 ```
 MetalLB
 ```
@@ -67,7 +69,7 @@ controller:
   defaultTLSSecret:
      enabled: false
 EOF
-helm install haproxy haproxytech/kubernetes-ingress --namespace haproxy --create namespace -f haproxy-values.yaml
+helm install haproxy haproxytech/kubernetes-ingress --namespace haproxy --create-namespace -f haproxy-values.yaml
 ```
 Test Ingress
 ```

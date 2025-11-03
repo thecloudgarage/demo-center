@@ -63,7 +63,23 @@ controller:
   defaultTLSSecret:
      enabled: false
 EOF
-helm install haproxy haproxytech/kubernetes-ingress --namespace haproxy --create namespace -f haproxy-values.yaml 
+helm install haproxy haproxytech/kubernetes-ingress --namespace haproxy --create namespace -f haproxy-values.yaml
+```
+Test Ingress
+```
+apiVersion: networking.k8s.io/v1beta1 
+kind: Ingress 
+metadata: 
+  name: app-ingress 
+  namespace: default 
+spec: 
+  rules: 
+  - http: 
+      paths: 
+      - path: / 
+        backend: 
+          serviceName: app-service 
+          servicePort: 80
 ```
 Metrics server
 ```

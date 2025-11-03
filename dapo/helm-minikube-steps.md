@@ -54,7 +54,7 @@ HA Proxy Ingress
 ```
 helm repo add haproxytech https://haproxytech.github.io/helm-charts
 helm repo update
-cat <<EOF > haproxyvalues.yaml
+cat <<EOF > haproxy-values.yaml
 controller:
   image:
     repository: haproxytech/kubernetes-ingress

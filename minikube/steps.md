@@ -96,20 +96,23 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: nginx-ingress
+  name: hello-world-ingress
   namespace: hello-world
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  ingressClassName: haproxy
   rules:
-  - http:
+  - host: hello-server.local
+    http:
       paths:
-      - pathType: Prefix
-        path: "/hello-world"
-        backend:
+      - backend:
           service:
             name: hello-world
             port:
               number: 80
+        path: /
+        pathType: prefix
+  tls:
+  - hosts:
+    - hello-server.local
 EOF
 ```

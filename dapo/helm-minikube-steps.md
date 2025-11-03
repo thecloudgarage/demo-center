@@ -104,7 +104,8 @@ metadata:
 spec: 
   selector: 
     run: app 
-  ports: - name: http 
+  ports:
+  - name: http 
     port: 80 
     protocol: TCP 
     targetPort: 3000

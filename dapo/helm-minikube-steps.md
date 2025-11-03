@@ -114,7 +114,6 @@ apiVersion: networking.k8s.io/v1beta1
 kind: Ingress 
 metadata: 
   name: app-ingress 
-  namespace: default 
 spec: 
   rules: 
   - http: 

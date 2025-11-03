@@ -18,11 +18,14 @@ sudo mv ./kubectl /usr/local/bin/kubectl
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
 ```
-Start minikube
+Gain root
 ```
 sudo su
+```
+Start minikube
+```
 minikube start -p dapo --cni=calico --driver=docker --force
-minikube addons enable metallb
+minikube -p dapo addons enable metallb
 ```
 MetalLB
 ```

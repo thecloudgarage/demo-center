@@ -27,6 +27,22 @@ MetalLB
 ```
 helm repo add metallb https://metallb.github.io/metallb
 helm install metallb metallb/metallb --wait --timeout 15m --namespace metallb-system --create-namespace
+cat <<EOF | kubectl apply -f -
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: first-pool
+  namespace: metallb-system
+spec:
+  addresses:
+  - 192.168.49.100-192.168.49.110 #find the range using minikube ip command and append a free pool/range
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: example
+  namespace: metallb-system
+EOF
 ```
 HA Proxy Ingress
 ```

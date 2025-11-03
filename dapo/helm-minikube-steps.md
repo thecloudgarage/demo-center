@@ -29,32 +29,23 @@ minikube -p dapo addons enable metallb
 minikube -p dapo addons configure metallb
 #provide the range (possibly 192.168.49.100 and end 192.168.49.110) 
 ```
-MetalLB
-```
-helm repo add metallb https://metallb.github.io/metallb
-helm install metallb metallb/metallb --wait --timeout 15m --namespace metallb-system --create-namespace
-cat <<EOF | kubectl apply -f -
-apiVersion: metallb.io/v1beta1
-kind: IPAddressPool
-metadata:
-  name: first-pool
-  namespace: metallb-system
-spec:
-  addresses:
-  - 192.168.49.100-192.168.49.110 #find the range using minikube ip command and append a free pool/range
----
-apiVersion: metallb.io/v1beta1
-kind: L2Advertisement
-metadata:
-  name: example
-  namespace: metallb-system
-EOF
-```
 HA Proxy Ingress
 ```
-helm repo add haproxytech https://haproxytech.github.io/helm-charts
+helm repo add haproxy-ingress https://haproxy-ingress.github.io/charts
 helm repo update
-cat <<EOF > haproxy-values.yaml
+cat <<EOF > haproxy-ingress-values.yaml
+# Expose HAProxy via a service loadbalancer
+controller:
+  ingressClassResource:
+    enabled: true
+EOF
+
+helm upgrade haproxy-ingress haproxy-ingress/haproxy-ingress\
+  --install\
+  --create-namespace --namespace ingress-controller\
+  --version 0.15.0\
+  -f haproxy-ingress-values.yaml
+
 controller:
   image:
     repository: haproxytech/kubernetes-ingress

@@ -63,8 +63,7 @@ controller:
   defaultTLSSecret:
      enabled: false
 EOF
-helm install haproxy haproxytech/kubernetes-ingress --namespace haproxy --create
-namespace -f haproxy-values.yaml 
+helm install haproxy haproxytech/kubernetes-ingress --namespace haproxy --create namespace -f haproxy-values.yaml 
 ```
 Metrics server
 ```

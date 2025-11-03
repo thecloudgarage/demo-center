@@ -68,6 +68,47 @@ helm install haproxy haproxytech/kubernetes-ingress --namespace haproxy --create
 Test Ingress
 ```
 cat <<EOF | kubectl apply -f -
+apiVersion: apps/v1 
+kind: Deployment 
+metadata: 
+  labels: 
+    run: app 
+  name: app 
+spec: 
+  replicas: 5 
+  selector: 
+    matchLabels: 
+      run: app 
+  template: 
+    metadata: 
+      labels: 
+        run: app 
+    spec: 
+      containers: 
+      - name: app 
+        image: errm/versions:0.0.1 
+        ports: 
+        - containerPort: 3000 
+        readinessProbe: 
+          httpGet: 
+            path: / 
+            port: 3000 
+          initialDelaySeconds: 5 
+          periodSeconds: 5 
+          successThreshold: 1
+---
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: app-service 
+spec: 
+  selector: 
+    run: app 
+  ports: - name: http 
+    port: 80 
+    protocol: TCP 
+    targetPort: 3000
+---
 apiVersion: networking.k8s.io/v1beta1 
 kind: Ingress 
 metadata: 

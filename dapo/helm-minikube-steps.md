@@ -75,7 +75,7 @@ metadata:
     run: app 
   name: app 
 spec: 
-  replicas: 5 
+  replicas: 1 
   selector: 
     matchLabels: 
       run: app 

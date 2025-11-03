@@ -22,6 +22,7 @@ Start minikube
 ```
 sudo su
 minikube start -p dapo --cni=calico --driver=docker --force
+minikube addons enable metallb
 ```
 MetalLB
 ```
@@ -67,6 +68,14 @@ helm install haproxy haproxytech/kubernetes-ingress --namespace haproxy --create
 ```
 Test Ingress
 ```
+kubectl --namespace default create deployment echoserver --image k8s.gcr.io/echoserver:1.3
+kubectl --namespace default expose deployment echoserver --port=8080
+kubectl --namespace default create ingress echoserver \
+  --class=haproxy \
+  --rule="echoserver.local/*=echoserver:8080,tls"
+curl -k https://echoserver.local
+wget -qO- --no-check-certificate https://echoserver.local
+
 cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1 
 kind: Deployment 

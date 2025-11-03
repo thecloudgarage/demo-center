@@ -23,3 +23,41 @@ Start minikube
 sudo su
 minikube start -p dapo --cni=calico --driver=docker --force
 ```
+MetalLB
+```
+helm repo add metallb https://metallb.github.io/metallb
+helm install metallb metallb/metallb --wait --timeout 15m --namespace metallb-system --create-namespace
+```
+HA Proxy Ingress
+```
+helm repo add haproxytech https://haproxytech.github.io/helm-charts
+helm repo update
+cat <<EOF > values.yaml
+controller:
+  image:
+    repository: haproxytech/kubernetes-ingress
+    pullPolicy: Always
+  service:
+    type: LoadBalancer
+    externalTrafficPolicy: Local
+  config:
+    ssl-passthrough: "true"
+  hostNetwork: true
+  kind: DaemonSet
+  defaultTLSSecret:
+     enabled: false
+EOF
+helm install haproxy haproxytech/kubernetes-ingress --namespace haproxy --create
+namespace -f haproxy-values.yaml 
+```
+Metrics server
+```
+curl -LO https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl apply -f components.yaml
+```
+Longhorn
+```
+helm repo add longhorn https://charts.longhorn.io
+helm repo update
+helm install longhorn longhorn/longhorn --namespace longhorn-system --createnamespace --set persistence.defaultClassReplicaCount=1 --set defaultSettings.defaultReplicaCount=1 --version 1.9.1
+```

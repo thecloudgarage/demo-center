@@ -76,6 +76,7 @@ spec:
         app: hello-world
     spec:
       containers:
+#      - image: gcr.io/google-samples/node-hello:1.0
       - image: us-docker.pkg.dev/google-samples/containers/gke/hello-app:1.0
         name: hello-world
         ports:
@@ -96,23 +97,20 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: hello-world-ingress
+  name: nginx-ingress
   namespace: hello-world
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  ingressClassName: haproxy
   rules:
-  - host: hello-server.local
-    http:
+  - http:
       paths:
-      - backend:
+      - pathType: Prefix
+        path: "/hello-world"
+        backend:
           service:
             name: hello-world
             port:
               number: 80
-        path: /
-        pathType: prefix
-  tls:
-  - hosts:
-    - hello-server.local
 EOF
 ```

@@ -25,7 +25,13 @@ sudo su
 Start minikube
 ```
 minikube start -p dapo --cni=calico --driver=docker --force --cpus=all
+```
+Enable MetalLB as an addon
+```
 minikube -p dapo addons enable metallb
+```
+Configure MetalLB IP advertisement
+```
 minikube -p dapo addons configure metallb
 #provide the range (possibly 192.168.49.100 and end 192.168.49.110) 
 ```
@@ -39,94 +45,25 @@ controller:
   ingressClassResource:
     enabled: true
 EOF
-
 helm upgrade haproxy-ingress haproxy-ingress/haproxy-ingress\
   --install\
   --create-namespace --namespace ingress-controller\
   --version 0.15.0\
   -f haproxy-ingress-values.yaml
-
-controller:
-  image:
-    repository: haproxytech/kubernetes-ingress
-    pullPolicy: Always
-  service:
-    type: LoadBalancer
-    externalTrafficPolicy: Local
-  config:
-    ssl-passthrough: "true"
-  hostNetwork: true
-  kind: DaemonSet
-  defaultTLSSecret:
-     enabled: false
-EOF
-helm install haproxy haproxytech/kubernetes-ingress --namespace haproxy --create-namespace -f haproxy-values.yaml
+```
+Verify Ingress controller external IP
+```
+kubectl get svc -n ingress-controller
 ```
 Test Ingress
 ```
-cat <<EOF | kubectl apply -f -
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: hello-world
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    app: hello-world
-  name: hello-world
-  namespace: hello-world
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: hello-world
-  template:
-    metadata:
-      labels:
-        app: hello-world
-    spec:
-      containers:
-      - image: us-docker.pkg.dev/google-samples/containers/gke/hello-app:1.0
-        name: hello-world
-        ports:
-        - containerPort: 8080
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: hello-world
-  namespace: hello-world
-spec:
-  selector:
-    app: hello-world
-  ports:
-    - port: 80
-      targetPort: 8080
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: hello-world-ingress
-  namespace: hello-world
-spec:
-  ingressClassName: haproxy
-  rules:
-  - host: hello-server.local
-    http:
-      paths:
-      - backend:
-          service:
-            name: hello-world
-            port:
-              number: 80
-        path: /
-        pathType: prefix
-  tls:
-  - hosts:
-    - hello-server.local
-EOF
+kubectl apply -f https://raw.githubusercontent.com/thecloudgarage/demo-center/refs/heads/main/dapo/hello-world-ingress.yaml
+# Edit the local /etc/hosts to add in an entry for hello-world.local pointing to the external IP of the Ingress controller
+curl -k https://hello-world.local
+```
+Delete the Test ingress deployment
+```
+kubectl delete -f https://raw.githubusercontent.com/thecloudgarage/demo-center/refs/heads/main/dapo/hello-world-ingress.yaml
 ```
 Metrics server
 ```

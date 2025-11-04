@@ -45,8 +45,6 @@ controller:
   image:
     repository: haproxytech/kubernetes-ingress
     pullPolicy: Always
-  imagePullSecrets:
-    - name: docker-secret
   service:
     type: LoadBalancer
     externalTrafficPolicy: Local

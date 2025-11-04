@@ -53,7 +53,7 @@ controller:
 #  hostNetwork: true
   kind: DaemonSet
   defaultTLSSecret:
-     enabled: false
+     enabled: true
 EOF
 helm install haproxy haproxytech/kubernetes-ingress --namespace haproxy --create-namespace -f haproxy-values.yaml 
 ```

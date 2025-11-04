@@ -103,6 +103,5 @@ kubectl patch storageclass longhorn -p "{\"metadata\": {\"annotations\":{\"stora
 ```
 Test Longhorn
 ```
-kubectl apply -f https://raw.githubusercontent.com/thecloudgarage/demo-center/refs/heads/main/dapo/mysql-longhorn-pvc.yaml
-kubectl apply -f https://raw.githubusercontent.com/thecloudgarage/demo-center/refs/heads/main/dapo/mysql-longhorn.yaml
+kubectl apply -f https://raw.githubusercontent.com/thecloudgarage/demo-center/refs/heads/main/dapo/mysql.yaml
 ```

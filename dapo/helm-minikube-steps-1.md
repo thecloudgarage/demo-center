@@ -86,7 +86,15 @@ Deploy Longhorn
 ```
 helm repo add longhorn https://charts.longhorn.io
 helm repo update
-helm install longhorn longhorn/longhorn --namespace longhorn-system --create-namespace --set persistence.defaultClassReplicaCount=1 --set defaultSettings.defaultReplicaCount=1 --version 1.9.1
+helm install longhorn longhorn/longhorn --namespace longhorn-system --create-namespace \
+--set persistence.defaultClassReplicaCount=1 \
+--set defaultSettings.defaultReplicaCount=1 \
+--set csi.attacherReplicaCount=1 \
+--set csi.provisionerReplicaCount=1 \
+--set csi.resizerReplicaCount=1 \
+--set csi.snapshotterReplicaCount =1 \
+--set longhornUI.replicas=1 \
+--version 1.9.1
 ```
 Patch storage classes
 ```

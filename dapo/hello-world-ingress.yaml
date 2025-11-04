@@ -43,6 +43,8 @@ kind: Ingress
 metadata:
   name: hello-world-ingress
   namespace: hello-world
+  annotations:
+    haproxy.ingress.kubernetes.io/ssl-passthrough: "false"
 spec:
   ingressClassName: haproxy
   rules:

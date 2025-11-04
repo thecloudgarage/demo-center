@@ -92,7 +92,7 @@ helm install longhorn longhorn/longhorn --namespace longhorn-system --create-nam
 --set csi.attacherReplicaCount=1 \
 --set csi.provisionerReplicaCount=1 \
 --set csi.resizerReplicaCount=1 \
---set csi.snapshotterReplicaCount =1 \
+--set csi.snapshotterReplicaCount=1 \
 --set longhornUI.replicas=1 \
 --version 1.9.1
 ```

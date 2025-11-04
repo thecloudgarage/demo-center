@@ -48,8 +48,8 @@ controller:
   service:
     type: LoadBalancer
     externalTrafficPolicy: Local
-#  config:
-#    ssl-passthrough: "true"
+  config:
+    ssl-passthrough: "true"
 #  hostNetwork: true
   kind: DaemonSet
   defaultTLSSecret:

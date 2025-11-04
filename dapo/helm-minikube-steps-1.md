@@ -73,9 +73,22 @@ Metrics server
 curl -LO https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 kubectl apply -f components.yaml
 ```
-Longhorn
+Longhorn pre-requisties
+```
+minikube -p dapo ssh
+sudo apt-get update -y
+sudo apt-get install libterm-readline-gnu-perl -y
+sudo apt-get install open-iscsi -y
+sudo systemctl start iscsid
+sudo systemctl enable iscsid
+```
+Deploy Longhorn
 ```
 helm repo add longhorn https://charts.longhorn.io
 helm repo update
 helm install longhorn longhorn/longhorn --namespace longhorn-system --create-namespace --set persistence.defaultClassReplicaCount=1 --set defaultSettings.defaultReplicaCount=1 --version 1.9.1
 ```
+Patch storage classes
+```
+kubectl patch storageclass standard -p "{\"metadata\": {\"annotations\":{\"storageclass.kubernetes.io/is-default-class\":\"false\"}}}"
+kubectl patch storageclass longhorn -p "{\"metadata\": {\"annotations\":{\"storageclass.kubernetes.io/is-default-class\":\"true\"}}}" 

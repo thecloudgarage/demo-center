@@ -92,3 +92,9 @@ Patch storage classes
 ```
 kubectl patch storageclass standard -p "{\"metadata\": {\"annotations\":{\"storageclass.kubernetes.io/is-default-class\":\"false\"}}}"
 kubectl patch storageclass longhorn -p "{\"metadata\": {\"annotations\":{\"storageclass.kubernetes.io/is-default-class\":\"true\"}}}" 
+```
+Test Longhorn
+```
+kubectl apply -f https://raw.githubusercontent.com/thecloudgarage/demo-center/refs/heads/main/dapo/mysql-longhorn-pvc.yaml
+kubectl apply -f https://raw.githubusercontent.com/thecloudgarage/demo-center/refs/heads/main/dapo/mysql-longhorn.yaml
+```

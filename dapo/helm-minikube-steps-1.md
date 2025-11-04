@@ -64,12 +64,9 @@ kubectl get svc -n ingress-controller
 Test Ingress
 ```
 kubectl apply -f https://raw.githubusercontent.com/thecloudgarage/demo-center/refs/heads/main/dapo/hello-world-ingress.yaml
+
 # Edit the local /etc/hosts to add in an entry for hello-server.local pointing to the external IP of the Ingress controller
 curl -k https://hello-server.local
-```
-Delete the Test ingress deployment
-```
-kubectl delete -f https://raw.githubusercontent.com/thecloudgarage/demo-center/refs/heads/main/dapo/hello-world-ingress.yaml
 ```
 Metrics server
 ```

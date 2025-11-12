@@ -62,7 +62,7 @@ Kubeflow
 ```
 git clone -b v1.10.2 https://github.com/kubeflow/manifests.git
 cd manifests
-sed -i "s/\$(profile-name)/REPLACEMENT/g" common/user-namespace/base/profile-instance.yaml
+sed -i "s/\$(profile-name)/kubeflow-user@example.com/g" common/user-namespace/base/profile-instance.yaml
 while ! kustomize build example | awk '!/ well-defined/' | kubectl apply -f - --server-side --force-conflicts; do echo "Retrying to apply resources"; sleep 10; done
 while ! kustomize build  example | kubectl apply -f - --server-side --force-conflicts; do echo "Retrying to apply resources"; sleep 20; done
 ```

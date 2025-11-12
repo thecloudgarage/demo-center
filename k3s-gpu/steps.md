@@ -25,6 +25,12 @@ sudo sysctl --system
 K3s
 ```
 curl -sfL https://get.k3s.io | sh -s - --disable=servicelb --disable=traefik --flannel-backend=none --cluster-cidr=10.0.0.0/16 --disable-network-policy
+mkdir -p ~/.kube
+sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+sudo chown $USER ~/.kube/config
+sudo chmod 600 ~/.kube/config
+export KUBECONFIG=~/.kube/config
+kubectl get nodes
 ```
 Configure runtime
 ```

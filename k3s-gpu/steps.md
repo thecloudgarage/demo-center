@@ -3,6 +3,16 @@ sudo apt update
 sudo apt upgrade -y
 sudo apt install curl wget build-essential procps curl file git zip unzip sshpass jq open-iscsi nfs-common -y
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+wget https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+chmod +x install.sh
+#NOTE HOW WE ARE PASSING AN ENTER FOR THE INTERACTIVE PROMPT THAT THE INSTALL SCRIPT GENERATES TO CONFIRM FOR INSTALLATION
+sudo echo -ne '\n' | ./install.sh
+echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/$USER/.profile
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+```
+Kustomize
+```
+brew install kustomize
 ```
 system settings
 ```

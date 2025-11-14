@@ -79,7 +79,7 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-  - 192.168.49.100-192.168.49.110 #find the range using minikube ip command and append a free pool/range
+  - 192.168.1.100-192.168.1.110
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement

@@ -27,6 +27,7 @@ helm install --wait --generate-name nvidia/gpu-operator
 sleep 60
 git clone https://github.com/kubeflow/manifests.git
 cd manifests
-sed -i "s/\$(profile-name)/myprofile/g" common/user-namespace/base/profile-instance.yaml
+sed -i "s/\$(user)/user@example.com/g" common/user-namespace/base/profile-instance.yaml
+sed -i "s/\$(profile-name)/kubeflow-user-example-com/g" common/user-namespace/base/profile-instance.yaml
 while ! kustomize build  example | kubectl apply -f - --server-side --force-conflicts; do echo "Retrying to apply resources"; sleep 30; done
 ```

@@ -287,7 +287,7 @@ curl -k -u "elastic:${ES_PW}" -X GET "https://${ES_SERVICE_HOST}:9200/products/_
     }
   }"
 ```
-Lets change the index to a warm tier using ILM
+Lets change the index to a warm tier manually (ILM is also possible via policy)
 ```
 ES_HOST="203.0.113.42"  # LB endpoint
 
@@ -307,34 +307,13 @@ curl -k -u "elastic:${ES_PW}" -X PUT "https://${ES_SERVICE_HOST}:9200/products/_
       }
     }
   }'
-
-curl -k -u "elastic:${ES_PW}" -X PUT "https://${ES_SERVICE_HOST}:9200/_ilm/policy/products_hot_warm" \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "policy": {
-      "phases": {
-        "hot": {
-          "actions": { }
-        },
-        "warm": {
-          "min_age": "7d",
-          "actions": {
-            "allocate": {
-              "include": { "data": "warm" }
-            },
-            "read_only": {}
-          }
-        }
-      }
-    }
-  }'
-
-curl -k -u "elastic:${ES_PW}" -X PUT "https://${ES_SERVICE_HOST}:9200/products/_settings" \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "index": {
-      "lifecycle": {
-        "name": "products_hot_warm"
-      }
-    }
-  }'
+```
+Lets check the new tier
+```
+curl -k -u "elastic:${ES_PW}" -X GET "https://${ES_SERVICE_HOST}:9200/products/_settings?pretty" \
+  -H 'Content-Type: application/json'
+```
+Lets check the shards reallocation to the warm node
+```
+curl -k -u "elastic:${ES_PW}" -X GET "https://${ES_SERVICE_HOST}:9200/_cat/shards/products?v"
+```

@@ -177,7 +177,7 @@ ES_PW=$(
   kubectl -n elasticsearch get secret "${ES_CLUSTER_NAME}-es-elastic-user" \
     -o go-template='{{.data.elastic | base64decode}}{{"\n"}}'
 )
-ES_SERVICE_HOST=$(kubectl -n elasticsearch get svc "${ES_CLUSTER_NAME}-es-http" \
+ES_SERVICE_HOST=$(kubectl -n elasticsearch get svc "${ES_CLUSTER_NAME}-coord" \
   -o jsonpath='{.status.loadBalancer.ingress[0].ip}'; echo)
 ```
 ```

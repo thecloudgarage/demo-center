@@ -89,5 +89,8 @@ spec:
               memory: 2Gi
 ---
 ```
-
+```
+# Get the elastic user password
+kubectl -n logging get secret prod-es-es-elastic-user -o go-template='{{.data.elastic | base64decode}}{{"\n"}}'
+```
 

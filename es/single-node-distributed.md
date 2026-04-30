@@ -171,8 +171,8 @@ spec:
       targetPort: 9200
 ```
 ```
-ES_PW=$(kubectl -n logging get secret prod-es-es-elastic-user -o go-template='{{.data.elastic | base64decode}}{{"\n"}}')
-ES_SERVICE_HOST=$(kubectl -n logging get svc prod-es-es-http \
+ES_PW=$(kubectl -n elasticsearch get secret prod-es-es-elastic-user -o go-template='{{.data.elastic | base64decode}}{{"\n"}}')
+ES_SERVICE_HOST=$(kubectl -n elasticsearch get svc prod-es-es-http \
   -o jsonpath='{.status.loadBalancer.ingress[0].ip}'; echo)
 ```
 ```

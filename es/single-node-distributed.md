@@ -161,7 +161,7 @@ metadata:
   name: single-es-coord
   namespace: elasticsearch
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     elasticsearch.k8s.elastic.co/cluster-name: single-es
     role: coord

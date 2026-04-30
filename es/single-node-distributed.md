@@ -171,8 +171,13 @@ spec:
       targetPort: 9200
 ```
 ```
-ES_PW=$(kubectl -n elasticsearch get secret prod-es-es-elastic-user -o go-template='{{.data.elastic | base64decode}}{{"\n"}}')
-ES_SERVICE_HOST=$(kubectl -n elasticsearch get svc prod-es-es-http \
+ES_CLUSTER_NAME=$(kubectl get elasticsearch -n elasticsearch single-es \
+  -o jsonpath='{.metadata.name}{"\n"}')
+ES_PW=$(
+  kubectl -n elasticsearch get secret "${ES_CLUSTER_NAME}-es-elastic-user" \
+    -o go-template='{{.data.elastic | base64decode}}{{"\n"}}'
+)
+ES_SERVICE_HOST=$(kubectl -n elasticsearch get svc "${ES_CLUSTER_NAME}-es-http" \
   -o jsonpath='{.status.loadBalancer.ingress[0].ip}'; echo)
 ```
 ```

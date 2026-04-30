@@ -53,7 +53,7 @@ spec:
             accessModes: ["ReadWriteOnce"]
             resources:
               requests:
-                storage: 20Gi
+                storage: 2Gi
             # storageClassName: standard   # set if you need a specific class
 
     # 2) Coordinating-only (ingest gateway / HTTP entry)
@@ -113,7 +113,7 @@ spec:
             accessModes: ["ReadWriteOnce"]
             resources:
               requests:
-                storage: 50Gi
+                storage: 2Gi
             # storageClassName: standard
 
     # 4) Warm data node (1x)
@@ -147,7 +147,7 @@ spec:
             accessModes: ["ReadWriteOnce"]
             resources:
               requests:
-                storage: 100Gi
+                storage: 2Gi
             # storageClassName: standard
 ---
 # Optional: Service that points specifically at the coordinating-only node

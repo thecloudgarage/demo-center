@@ -20,7 +20,7 @@ spec:
   http:
     tls:
       selfSignedCertificate:
-        disabled: true
+        disabled: false
   secureSettings: []
   # You can also add:
   # config:

@@ -289,6 +289,25 @@ curl -k -u "elastic:${ES_PW}" -X GET "https://${ES_SERVICE_HOST}:9200/products/_
 ```
 Lets change the index to a warm tier using ILM
 ```
+ES_HOST="203.0.113.42"  # LB endpoint
+
+curl -k -u "elastic:${ES_PW}" -X PUT "https://${ES_SERVICE_HOST}:9200/products/_settings" \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "index": {
+      "routing": {
+        "allocation": {
+          "include": {
+            "data": "warm"
+          }
+        }
+      },
+      "blocks": {
+        "write": true
+      }
+    }
+  }'
+
 curl -k -u "elastic:${ES_PW}" -X PUT "https://${ES_SERVICE_HOST}:9200/_ilm/policy/products_hot_warm" \
   -H 'Content-Type: application/json' \
   -d '{

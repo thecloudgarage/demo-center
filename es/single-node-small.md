@@ -169,3 +169,6 @@ curl -k -u "elastic:${ES_PW}" "https://${ES_SERVICE_HOST}:9200/products/_search?
     "query": { "match_all": {} }
   }'
 ```
+Lets retrieve a single entry
+```
+curl -k -u "elastic:${ES_PW}" "https://${ES_SERVICE_HOST}:9200/products/_doc/1?pretty"

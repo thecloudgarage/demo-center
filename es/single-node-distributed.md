@@ -170,3 +170,30 @@ spec:
       port: 9200
       targetPort: 9200
 ```
+```
+ES_PW=$(kubectl -n logging get secret prod-es-es-elastic-user -o go-template='{{.data.elastic | base64decode}}{{"\n"}}')
+ES_SERVICE_HOST=$(kubectl -n logging get svc prod-es-es-http \
+  -o jsonpath='{.status.loadBalancer.ingress[0].ip}'; echo)
+```
+```
+curl -k -u "elastic:${ES_PW}" -X PUT "https://${ES_SERVICE_HOST}:9200/products" \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0,
+      "index.routing.allocation.include.data": "hot"
+    },
+    "mappings": {
+      "properties": {
+        "product_id":   { "type": "keyword" },
+        "name":         { "type": "text", "fields": { "keyword": { "type": "keyword" } } },
+        "category":     { "type": "keyword" },
+        "price":        { "type": "double" },
+        "in_stock":     { "type": "boolean" },
+        "tags":         { "type": "keyword" },
+        "created_at":   { "type": "date" },
+        "description":  { "type": "text" }
+      }
+    }
+  }'

@@ -91,6 +91,6 @@ spec:
 ```
 ```
 ES_PW=$(kubectl -n logging get secret prod-es-es-elastic-user -o go-template='{{.data.elastic | base64decode}}{{"\n"}}')
-kubectl -n logging get svc prod-es-es-http \
-  -o jsonpath='{.status.loadBalancer.ingress[0].ip}'; echo
+ES_SERVICE_HOST=$(kubectl -n logging get svc prod-es-es-http \
+  -o jsonpath='{.status.loadBalancer.ingress[0].ip}'; echo)
 ```

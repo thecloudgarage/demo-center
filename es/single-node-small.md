@@ -160,3 +160,12 @@ curl -k -u "elastic:${ES_PW}" -X POST "https://${ES_SERVICE_HOST}:9200/products/
 { "name": "Dell 64GB DDR5 RDIMM", "category": "component", "brand": "Dell", "price": 499.99, "in_stock": true, "rating": 4.6, "tags": ["memory","ddr5"], "created_at": "2024-01-20T10:00:00Z" }
 EOF
 ```
+Lets verify these entries
+```
+curl -k -u "elastic:${ES_PW}" "https://${ES_SERVICE_HOST}:9200/products/_search?pretty" \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "size": 20,
+    "query": { "match_all": {} }
+  }'
+```

@@ -252,7 +252,7 @@ curl -k -u "elastic:${ES_PW}" -X POST "https://${ES_SERVICE_HOST}:9200/products/
 ```
 Lets retrieve all products
 ```
-curl -X GET "http://${ES_SERVICE_HOST}:9200/products/_search?pretty" \
+curl -k -u "elastic:${ES_PW}" -X GET "https://${ES_SERVICE_HOST}:9200/products/_search?pretty" \
   -H 'Content-Type: application/json' \
   -d '{
     "size": 1000,
@@ -264,7 +264,7 @@ curl -X GET "http://${ES_SERVICE_HOST}:9200/products/_search?pretty" \
 Lets retrieve a product by fuzzy match
 ```
 SEARCH_TERM="monitor"
-curl -X GET "http://${ES_SERVICE_HOST}:9200/products/_search?pretty" \
+curl -k -u "elastic:${ES_PW}" -X GET "https://${ES_SERVICE_HOST}:9200/products/_search?pretty" \
   -H 'Content-Type: application/json' \
   -d "{
     \"size\": 20,

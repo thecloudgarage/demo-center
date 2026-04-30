@@ -252,8 +252,12 @@ curl -k -u "elastic:${ES_PW}" -X POST "https://${ES_SERVICE_HOST}:9200/products/
 ```
 Lets check the existing tier
 ```
-curl -k -u "elastic:${ES_PW}" -X GET "http://${ES_SERVICE_HOST}:9200/products/_settings?pretty" \
+curl -k -u "elastic:${ES_PW}" -X GET "https://${ES_SERVICE_HOST}:9200/products/_settings?pretty" \
   -H 'Content-Type: application/json'
+```
+Lets check the shards
+```
+curl -k -u "elastic:${ES_PW}" -X GET "https://${ES_SERVICE_HOST}:9200/_cat/shards/products?v"
 ```
 Lets retrieve all products
 ```

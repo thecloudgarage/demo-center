@@ -286,3 +286,36 @@ curl -k -u "elastic:${ES_PW}" -X GET "https://${ES_SERVICE_HOST}:9200/products/_
       }
     }
   }"
+```
+Lets change the index to a warm tier using ILM
+```
+curl -k -u "elastic:${ES_PW}" -X PUT "https://${ES_SERVICE_HOST}/_ilm/policy/products_hot_warm" \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "policy": {
+      "phases": {
+        "hot": {
+          "actions": { }
+        },
+        "warm": {
+          "min_age": "7d",
+          "actions": {
+            "allocate": {
+              "include": { "data": "warm" }
+            },
+            "read_only": {}
+          }
+        }
+      }
+    }
+  }'
+
+curl -k -u "elastic:${ES_PW}" -X PUT "https://${ES_SERVICE_HOST}:9200/products/_settings" \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "index": {
+      "lifecycle": {
+        "name": "products_hot_warm"
+      }
+    }
+  }'

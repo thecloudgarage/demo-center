@@ -205,7 +205,7 @@ curl -k -u "elastic:${ES_PW}" -X PUT "https://${ES_SERVICE_HOST}:9200/products" 
 ```
 Insert products
 ```
-curl -k -u "elastic:${ES_PW}" -X PUT "https://${ES_SERVICE_HOST}:9200/products/_bulk?refresh=true" \
+curl -k -u "elastic:${ES_PW}" -X POST "https://${ES_SERVICE_HOST}:9200/products/_bulk?refresh=true" \
   -H 'Content-Type: application/json' \
   -d '
 { "index": { "_id": "1" } }
@@ -249,3 +249,31 @@ curl -k -u "elastic:${ES_PW}" -X PUT "https://${ES_SERVICE_HOST}:9200/products/_
 { "index": { "_id": "20" } }
 { "product_id": "SKU-1020", "name": "Dell Webcam Full HD", "category": "audio_video", "price": 79.99, "in_stock": true,  "tags": ["webcam","1080p","usb"], "created_at": "2025-04-14T11:10:00Z", "description": "Full HD USB webcam optimized for conferencing." }
 '
+```
+Lets retrieve all products
+```
+curl -X GET "http://${ES_SERVICE_HOST}:9200/products/_search?pretty" \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "size": 1000,
+    "query": {
+      "match_all": {}
+    }
+  }'
+```
+Lets retrieve a product by fuzzy match
+```
+SEARCH_TERM="monitor"
+curl -X GET "http://${ES_SERVICE_HOST}:9200/products/_search?pretty" \
+  -H 'Content-Type: application/json' \
+  -d "{
+    \"size\": 20,
+    \"query\": {
+      \"fuzzy\": {
+        \"name\": {
+          \"value\": \"${SEARCH_TERM}\",
+          \"fuzziness\": \"AUTO\"
+        }
+      }
+    }
+  }"

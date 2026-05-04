@@ -2,7 +2,7 @@
 sudo hostnamectl set-hostname nodex
 
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC='server --cluster-init --write-kubeconfig-mode=644' \
-sh -s - --disable=servicelb --disable=traefik --flannel-backend=none --cluster-cidr=10.0.0.0/16 --disable-network-policy
+sh -s - --disable=servicelb --disable=traefik --cluster-cidr=10.0.0.0/16
 
 FIRST_SERVER_IP=$(hostname -I | awk '{print $1}')
 NODE_TOKEN=$(sudo cat /var/lib/rancher/k3s/server/node-token)
@@ -16,5 +16,5 @@ curl -sfL https://get.k3s.io | \
   K3S_URL="https://${FIRST_SERVER_IP}:6443" \
   K3S_TOKEN="${NODE_TOKEN}" \
   INSTALL_K3S_EXEC='agent' \
-  sh -s - --disable=servicelb --disable=traefik --flannel-backend=none --cluster-cidr=10.0.0.0/16 --disable-network-policy
+  sh -s -
 ```

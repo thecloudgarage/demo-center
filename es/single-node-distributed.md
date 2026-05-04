@@ -86,32 +86,7 @@ spec:
                   value: "-Xms512m -Xmx512m"
       # No volume claim: coord node does not persist data
 
-    # 3) Dedicated ingest + transform node (1x)
-    - name: ingest-transform
-      count: 1
-      config:
-        node.roles: ["ingest", "transform", "remote_cluster_client"]
-        node.store.allow_mmap: false
-      podTemplate:
-        metadata:
-          labels:
-            role: ingest-transform
-        spec:
-          containers:
-            - name: elasticsearch
-              resources:
-                requests:
-                  cpu: "500m"
-                  memory: "1Gi"
-                limits:
-                  cpu: "500m"
-                  memory: "1Gi"
-              env:
-                - name: ES_JAVA_OPTS
-                  value: "-Xms512m -Xmx512m"
-      # No volume claim: ingest/transform node does not hold data shards
-
-    # 4) Hot data nodes (2x)
+    # 3) Hot data nodes (2x)
     - name: data-hot
       count: 2
       config:
@@ -145,7 +120,7 @@ spec:
                 storage: 2Gi
             # storageClassName: standard
 
-    # 5) Warm data node (1x)
+    # 4) Warm data node (1x)
     - name: data-warm
       count: 1
       config:

@@ -1,3 +1,4 @@
+# 4 node K3 cluster (1 master, 3 workers)
 Setup unique hostnames on all nodes
 ```
 sudo hostnamectl set-hostname nodex

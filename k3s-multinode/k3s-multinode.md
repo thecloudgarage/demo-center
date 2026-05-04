@@ -1,13 +1,14 @@
+Setup unique hostnames on all nodes
 ```
 sudo hostnamectl set-hostname nodex
 ```
+Perform pre-requisites
 ```
 sudo apt update
 sudo apt upgrade -y
 sudo apt install curl wget build-essential procps curl file git zip unzip sshpass jq open-iscsi nfs-common -y
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-```
-```
+
 sudo swapoff -a
 sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 echo 'br_netfilter' | sudo tee /etc/modules-load.d/k8s.conf
@@ -24,7 +25,11 @@ EOF
 
 sudo sysctl --system
 ```
-On Master node
+Reboot all nodes after performing the above steps
+```
+sudo reboot
+```
+Install K3S On Master node
 ```
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC='server --cluster-init --write-kubeconfig-mode=644' \
 sh -s - --disable=servicelb --disable=traefik --cluster-cidr=10.0.0.0/16
@@ -42,7 +47,7 @@ export KUBECONFIG=~/.kube/config
 kubectl get nodes
 
 ```
-On worker nodes
+Install K3S On worker nodes
 ```
 export FIRST_SERVER_IP="<IP_of_node1>"
 export NODE_TOKEN="<token_from_node1>"
@@ -53,7 +58,7 @@ curl -sfL https://get.k3s.io | \
   INSTALL_K3S_EXEC='agent' \
   sh -s -
 ```
-MetalLB On Master node
+Install MetalLB (do this on master node)
 ```
 metallbStartIp=X.X.X.X
 metallbEndIp=Y.Y.Y.Y
@@ -75,7 +80,7 @@ metadata:
   namespace: metallb-system
 EOF
 ```
-HAProxy on Master node
+Install HAProx (do this on master node)
 ```
 helm repo add haproxytech https://haproxytech.github.io/helm-charts
 helm repo update
@@ -99,7 +104,7 @@ EOF
 
 helm install haproxy haproxytech/kubernetes-ingress --namespace haproxy --create-namespace -f haproxy-values.yaml
 ```
-Longhorn on Master node
+Install Longhorn (do this on master node)
 ```
 helm repo add longhorn https://charts.longhorn.io
 helm repo update
@@ -113,7 +118,7 @@ helm install longhorn longhorn/longhorn --namespace longhorn-system --create-nam
 --set longhornUI.replicas=1 \
 --version 1.9.1
 ```
-Patch storage class
+Patch storage class once longhorn is installed
 ```
 kubectl patch storageclass local-path -p "{\"metadata\": {\"annotations\":{\"storageclass.kubernetes.io/is-default-class\":\"false\"}}}"
 kubectl patch storageclass longhorn -p "{\"metadata\": {\"annotations\":{\"storageclass.kubernetes.io/is-default-class\":\"true\"}}}"

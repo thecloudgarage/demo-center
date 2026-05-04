@@ -330,3 +330,9 @@ Lets check the shards reallocation to the warm node
 ```
 curl -k -u "elastic:${ES_PW}" -X GET "https://${ES_SERVICE_HOST}:9200/_cat/shards/products?v"
 ```
+Accessing Kibana
+```
+username: elastic
+Password:
+kubectl get secret single-es-es-elastic-user -n elasticsearch -o go-template='{{.data.elastic | base64decode}}{{"\n"}}'
+```

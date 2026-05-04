@@ -194,6 +194,21 @@ spec:
     - name: http
       port: 9200
       targetPort: 9200
+---
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: single-es-kb
+  namespace: elasticsearch
+spec:
+  version: 8.13.0
+  count: 1
+  elasticsearchRef:
+    name: single-es
+  http:
+    service:
+      spec:
+        type: LoadBalancer
 ```
 ```
 ES_CLUSTER_NAME=$(kubectl get elasticsearch -n elasticsearch single-es \

@@ -1,0 +1,24 @@
+    # 3) Dedicated ingest + transform node (1x)
+    - name: ingest-transform
+      count: 1
+      config:
+        node.roles: ["ingest", "transform", "remote_cluster_client"]
+        node.store.allow_mmap: false
+      podTemplate:
+        metadata:
+          labels:
+            role: ingest-transform
+        spec:
+          containers:
+            - name: elasticsearch
+              resources:
+                requests:
+                  cpu: "500m"
+                  memory: "1Gi"
+                limits:
+                  cpu: "500m"
+                  memory: "1Gi"
+              env:
+                - name: ES_JAVA_OPTS
+                  value: "-Xms512m -Xmx512m"
+      # No volume claim: ingest/transform node does not hold data shards

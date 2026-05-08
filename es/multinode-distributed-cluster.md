@@ -29,7 +29,7 @@ spec:
   nodeSets:
     # 1) Master node (single)
     - name: master
-      count: 1
+      count: 2
       config:
         node.roles: ["master", "remote_cluster_client"]
         node.store.allow_mmap: false
@@ -62,7 +62,7 @@ spec:
 
     # 2) Coordinating-only (ingest gateway / HTTP entry)
     - name: coord
-      count: 1
+      count: 2
       config:
         # Empty role list => coordinating-only node
         node.roles: []
@@ -147,7 +147,7 @@ spec:
 
     # 5) Warm data node (1x)
     - name: data-warm
-      count: 1
+      count: 2
       config:
         node.roles: ["data_warm", "data_content", "remote_cluster_client"]
         node.attr.data: "warm"

@@ -24,7 +24,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  storageClassName: local-path   # k3s default; change if needed
+  storageClassName: longhorn   # k3s default; change if needed
 ---
 apiVersion: apps/v1
 kind: Deployment

@@ -122,7 +122,7 @@ Install
 ```
 helm repo add confluentinc https://confluentinc.github.io/cp-helm-charts/
 helm repo update
-helm install my-confluent confluentinc/cp-helm-charts -f values-k3s.yaml
+helm install my-confluent confluentinc/cp-helm-charts -f values-kafka.yaml
 ```
 Dockerfile for Kafka connect (mongo + elasticsearch)
 ```

@@ -29,7 +29,7 @@ spec:
   nodeSets:
     # 1) Master node (single)
     - name: master
-      count: 2
+      count: 3
       config:
         node.roles: ["master", "remote_cluster_client"]
         node.store.allow_mmap: false

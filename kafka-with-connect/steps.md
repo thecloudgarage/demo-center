@@ -26,14 +26,14 @@ cp-kafka:
   persistence:
     enabled: true
     storageClass: "longhorn"
-    size: 50Gi
+    size: 1Gi
   resources:
     requests:
-      cpu: "2"
-      memory: "4Gi"
+      cpu: "1"
+      memory: "1Gi"
     limits:
-      cpu: "4"
-      memory: "8Gi"
+      cpu: "2"
+      memory: "2Gi"
   configurationOverrides:
     "offsets.topic.replication.factor": "3"
     "transaction.state.log.replication.factor": "3"
@@ -48,10 +48,10 @@ cp-schema-registry:
   resources:
     requests:
       cpu: "500m"
-      memory: "1Gi"
+      memory: "512Mi"
     limits:
       cpu: "1"
-      memory: "2Gi"
+      memory: "1Gi"
 
 cp-kafka-rest:
   enabled: true
@@ -70,10 +70,10 @@ cp-ksql-server:
   resources:
     requests:
       cpu: "500m"
-      memory: "2Gi"
+      memory: "512Mi"
     limits:
       cpu: "1"
-      memory: "4Gi"
+      memory: "1Gi"
   configurationOverrides:
     "ksql.streams.replication.factor": "3"
     "ksql.sink.replicas": "3"
@@ -82,16 +82,16 @@ cp-kafka-connect:
   enabled: true
   replicaCount: 3
   image:
-    repository: "your-registry.example.com/confluent/cp-kafka-connect-mongo-es"
-    tag: "7.6.0"
+    repository: "thecloudgarage/cp-kafka-connect-mongo-es"
+    tag: "latest"
     pullPolicy: IfNotPresent
   resources:
     requests:
       cpu: "1"
-      memory: "2Gi"
+      memory: "512Mi"
     limits:
       cpu: "2"
-      memory: "4Gi"
+      memory: "1Gi"
   configurationOverrides:
     "config.storage.replication.factor": "3"
     "offset.storage.replication.factor": "3"
@@ -110,10 +110,10 @@ cp-control-center:
   resources:
     requests:
       cpu: "500m"
-      memory: "2Gi"
+      memory: "512Mi"
     limits:
       cpu: "1"
-      memory: "4Gi"
+      memory: "1Gi"
 
 podDisruptionBudget:
   enabled: true
@@ -130,8 +130,8 @@ FROM confluentinc/cp-kafka-connect:7.6.0
 
 USER root
 
-RUN confluent-hub install --no-prompt mongodb/kafka-connect-mongodb:1.13.0 && \
-    confluent-hub install --no-prompt confluentinc/kafka-connect-elasticsearch:14.0.6
+RUN confluent-hub install --no-prompt mongodb/kafka-connect-mongodb:latest && \
+    confluent-hub install --no-prompt confluentinc/kafka-connect-elasticsearch:latest
 
 ENV CONNECT_PLUGIN_PATH=/usr/share/java,/usr/share/confluent-hub-components
 
@@ -147,7 +147,7 @@ mongodb connector json (mongo-sink.json)
 
     "topics": "orders",
 
-    "connection.uri": "mongodb://MONGO_USER:MONGO_PASSWORD@mongodb.mongodb.svc.cluster.local:27017/?authSource=admin",
+    "connection.uri": "mongodb://mongo_user:mongo_password@mongodb.mongodb.svc.cluster.local:27017/?authSource=admin",
     "database": "orders_db",
     "collection": "orders_coll",
 

@@ -2,7 +2,7 @@ values-kafka.yaml
 ```
 # Global defaults
 global:
-  storageClass: "local-path"   # k3s default storage class; change if you use another
+  storageClass: "longhorn"   # k3s default storage class; change if you use another
   imagePullPolicy: IfNotPresent
 
 cp-zookeeper:
@@ -10,7 +10,7 @@ cp-zookeeper:
   servers: 3
   persistence:
     enabled: true
-    storageClass: "local-path"
+    storageClass: "longhorn"
     size: 10Gi
   resources:
     requests:
@@ -25,7 +25,7 @@ cp-kafka:
   brokers: 3
   persistence:
     enabled: true
-    storageClass: "local-path"
+    storageClass: "longhorn"
     size: 50Gi
   resources:
     requests:

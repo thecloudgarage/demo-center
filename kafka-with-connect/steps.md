@@ -167,7 +167,6 @@ elasticsearch sink connector (elastic-sink.json)
   "config": {
     "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
     "tasks.max": "2",
-
     "topics": "orders",
 
     "connection.url": "http://elasticsearch.elasticsearch.svc.cluster.local:9200",
@@ -177,6 +176,8 @@ elasticsearch sink connector (elastic-sink.json)
     "type.name": "_doc",
     "key.ignore": "true",
     "schema.ignore": "true",
+
+    "auto.create.indices.at.start": "true",
 
     "behavior.on.malformed.documents": "warn",
     "behavior.on.null.values": "delete",

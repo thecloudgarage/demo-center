@@ -11,7 +11,7 @@ cp-zookeeper:
   persistence:
     enabled: true
     storageClass: "longhorn"
-    size: 10Gi
+    size: 2Gi
   resources:
     requests:
       cpu: "500m"

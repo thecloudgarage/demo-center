@@ -128,6 +128,9 @@ spec:
   image:
     application: confluentinc/cp-ksqldb-server:8.2.0
     init: confluentinc/confluent-init-container:3.2.0
+  dataVolumeCapacity: 1Gi
+  storageClass:
+    name: longhorn
   dependencies:
     kafka:
       bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071
@@ -188,6 +191,9 @@ spec:
   image:
     application: confluentinc/cp-enterprise-control-center-next-gen:latest
     init: confluentinc/confluent-init-container:3.2.0
+  dataVolumeCapacity: 1Gi
+  storageClass:
+    name: longhorn
   dependencies:
     kafka:
       bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071

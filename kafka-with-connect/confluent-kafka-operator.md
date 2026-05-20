@@ -162,6 +162,10 @@ spec:
   dependencies:
     kafka:
       bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071
+  externalAccess:
+  type: loadBalancer
+  loadBalancer:
+    domain: kafkaconnect.example.com
   podTemplate:
     resources:
       requests:
@@ -209,4 +213,80 @@ spec:
 ```
 kubectl apply -f cfk-kraft-latest.yaml
 kubectl get pods -n confluent -w
+```
+MongoDB connector JSON
+```
+cat > mongo-sink.json <<EOF
+{
+  "name": "mongo-sink",
+  "config": {
+    "connector.class": "com.mongodb.kafka.connect.MongoSinkConnector",
+    "tasks.max": "2",
+
+    "topics": "orders",
+
+    "connection.uri": "mongodb://mongo_user:mongo_password@mongodb.mongodb.svc.cluster.local:27017/?authSource=admin",
+    "database": "orders_db",
+    "collection": "orders_coll",
+
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+
+    "writemodel.strategy": "com.mongodb.kafka.connect.sink.writemodel.strategy.ReplaceOneDefaultStrategy",
+    "document.id.strategy": "com.mongodb.kafka.connect.sink.processor.id.strategy.BsonOidStrategy",
+
+    "max.num.retries": "10",
+    "retries.defer.timeout": "5000"
+  }
+}
+EOF
+```
+ElasticSearch connector JSON
+```
+ES_CLUSTER_NAME=$(kubectl get elasticsearch -n elasticsearch single-es \
+  -o jsonpath='{.metadata.name}{"\n"}')
+ES_PW=$(
+  kubectl -n elasticsearch get secret "${ES_CLUSTER_NAME}-es-elastic-user" \
+    -o go-template='{{.data.elastic | base64decode}}{{"\n"}}'
+)
+ES_SERVICE_HOST=$(kubectl -n elasticsearch get svc "${ES_CLUSTER_NAME}-coord" \
+  -o jsonpath='{.status.loadBalancer.ingress[0].ip}'; echo)
+
+```
+cat > es-sink.json <<EOF
+{
+  "name": "es-sink",
+  "config": {
+    "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
+    "tasks.max": "2",
+    "topics": "orders",
+    "connection.url": "https://elasticsearch.$ES_SERVICE_HOST.svc.cluster.local:9200",
+    "connection.username": "elastic",
+    "connection.password": "$ES_PW",
+    "type.name": "_doc",
+    "key.ignore": "true",
+    "schema.ignore": "true",
+    "auto.create.indices.at.start": "true",
+    "behavior.on.malformed.documents": "warn",
+    "behavior.on.null.values": "delete",
+    "write.method": "insert",
+    "max.in.flight.requests": "5",
+    "batch.size": "2000",
+    "max.buffered.records": "20000"
+  }
+}
+EOF
+```
+Post the connectors
+```
+CONNECT_URL=http://kafkaconnect.example.com  # service in the Connect namespace
+
+curl -X POST "$CONNECT_URL/connectors" \
+  -H "Content-Type: application/json" \
+  -d @mongo-sink.json
+
+curl -X POST "$CONNECT_URL/connectors" \
+  -H "Content-Type: application/json" \
+  -d @es-sink.json
 ```

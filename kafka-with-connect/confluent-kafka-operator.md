@@ -497,7 +497,6 @@ spec:
               cpu: "500m"
               memory: "256Mi"
 ```
-```
 Observe via control center
 ```
 Open http://<control-center-external-ip>:9021 in a browser.

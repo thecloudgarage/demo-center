@@ -21,8 +21,8 @@ metadata:
 spec:
   replicas: 3
   image:
-    application: confluentinc/cp-server
-    init: confluentinc/confluent-init-container
+    application: confluentinc/cp-server:8.2.0
+    init: confluentinc/confluent-init-container:3.2.0
   dataVolumeCapacity: 2Gi
   storageClass:
     name: longhorn
@@ -44,8 +44,8 @@ metadata:
 spec:
   replicas: 3
   image:
-    application: confluentinc/cp-server
-    init: confluentinc/confluent-init-container
+    application: confluentinc/cp-server:8.2.0
+    init: confluentinc/confluent-init-container:3.2.0
   dependencies:
     kRaftController:
       clusterRef:
@@ -80,8 +80,8 @@ metadata:
 spec:
   replicas: 2
   image:
-    application: confluentinc/cp-schema-registry
-    init: confluentinc/confluent-init-container
+    application: confluentinc/cp-schema-registry:8.2.0
+    init: confluentinc/confluent-init-container:3.2.0
   dependencies:
     kafka:
       bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071
@@ -103,8 +103,8 @@ metadata:
 spec:
   replicas: 2
   image:
-    application: confluentinc/cp-kafka-rest
-    init: confluentinc/confluent-init-container
+    application: confluentinc/cp-kafka-rest:8.2.0
+    init: confluentinc/confluent-init-container:3.2.0
   dependencies:
     kafka:
       bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071
@@ -126,8 +126,8 @@ metadata:
 spec:
   replicas: 2
   image:
-    application: confluentinc/cp-ksqldb-server
-    init: confluentinc/confluent-init-container
+    application: confluentinc/cp-ksqldb-server:8.2.0
+    init: confluentinc/confluent-init-container:3.2.0
   dependencies:
     kafka:
       bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071
@@ -155,7 +155,7 @@ spec:
   replicas: 3
   image:
     application: thecloudgarage/cp-kafka-connect-mongo-es:latest
-    init: confluentinc/confluent-init-container
+    init: confluentinc/confluent-init-container:3.2.0
   dependencies:
     kafka:
       bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071
@@ -186,8 +186,8 @@ metadata:
 spec:
   replicas: 1
   image:
-    application: confluentinc/cp-enterprise-control-center-next-gen
-    init: confluentinc/confluent-init-container
+    application: confluentinc/cp-enterprise-control-center-next-gen:latest
+    init: confluentinc/confluent-init-container:3.2.0
   dependencies:
     kafka:
       bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071

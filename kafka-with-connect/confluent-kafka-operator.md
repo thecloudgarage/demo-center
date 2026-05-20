@@ -1,11 +1,16 @@
 ```
-kubectl create namespace confluent
-kubectl config set-context --current --namespace confluent
+kubectl create namespace confluent 2>/dev/null || true
+kubectl config set-context --current --namespace=confluent
 
+helm repo remove confluentinc 2>/dev/null || true
 helm repo add confluentinc https://packages.confluent.io/helm
 helm repo update
+helm search repo confluentinc/confluent-for-kubernetes --versions
 
-helm upgrade --install confluent-operator confluentinc/confluent-for-kubernetes -n confluent
+helm upgrade --install confluent-operator \
+  confluentinc/confluent-for-kubernetes \
+  --namespace confluent \
+  --create-namespace
 ```
 ```
 apiVersion: platform.confluent.io/v1beta1

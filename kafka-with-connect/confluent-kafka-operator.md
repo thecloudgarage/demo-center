@@ -292,6 +292,10 @@ CONNECT_URL=http://kafkaconnect.example.com  # service in the Connect namespace
 curl -X POST "$CONNECT_URL/connectors" \
   -H "Content-Type: application/json" \
   -d @mongo-sink.json
+
+curl -X POST "$CONNECT_URL/connectors" \
+  -H "Content-Type: application/json" \
+  -d @es-sink.json
 ```
 Consumer app
 ```
@@ -349,9 +353,6 @@ RUN pip install --no-cache-dir confluent-kafka
 COPY consumer.py .
 
 CMD ["python", "consumer.py"]
-curl -X POST "$CONNECT_URL/connectors" \
-  -H "Content-Type: application/json" \
-  -d @es-sink.json
 ```
 Consumer app deployment
 ```

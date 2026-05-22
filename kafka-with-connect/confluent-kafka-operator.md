@@ -163,9 +163,9 @@ spec:
     kafka:
       bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071
   externalAccess:
-  type: loadBalancer
-  loadBalancer:
-    domain: kafkaconnect.example.com
+    type: loadBalancer
+    loadBalancer:
+      domain: kafkaconnect.example.com
   podTemplate:
     resources:
       requests:

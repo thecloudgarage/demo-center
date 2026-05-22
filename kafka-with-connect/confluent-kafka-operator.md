@@ -297,7 +297,7 @@ Consumer app
 import os
 from confluent_kafka import Consumer, KafkaException
 
-BOOTSTRAP_SERVERS = os.getenv("BOOTSTRAP_SERVERS", "my-confluent-cp-kafka-headless:9092")
+BOOTSTRAP_SERVERS = os.getenv("BOOTSTRAP_SERVERS", "kafka.confluent.svc.cluster.local:9071")
 TOPIC = os.getenv("KAFKA_TOPIC", "orders")
 GROUP_ID = os.getenv("GROUP_ID", "orders-cli-consumer")
 
@@ -370,11 +370,11 @@ spec:
     spec:
       containers:
         - name: orders-consumer
-          image: your-registry.example.com/orders-consumer:latest
+          image: thecloudgarage/orders-consumer:latest
           imagePullPolicy: IfNotPresent
           env:
             - name: BOOTSTRAP_SERVERS
-              value: "my-confluent-cp-kafka-headless:9092"
+              value: "kafka.confluent.svc.cluster.local:9071"
             - name: KAFKA_TOPIC
               value: "orders"
             - name: GROUP_ID
@@ -397,7 +397,7 @@ import uuid
 from random import randint, uniform
 from confluent_kafka import Producer
 
-BOOTSTRAP_SERVERS = os.getenv("BOOTSTRAP_SERVERS", "my-confluent-cp-kafka-headless:9092")
+BOOTSTRAP_SERVERS = os.getenv("BOOTSTRAP_SERVERS", "kafka.confluent.svc.cluster.local:9071")
 TOPIC = os.getenv("KAFKA_TOPIC", "orders")
 INTERVAL_SECONDS = float(os.getenv("INTERVAL_SECONDS", "1.0"))
 
@@ -484,11 +484,11 @@ spec:
     spec:
       containers:
         - name: orders-producer
-          image: your-registry.example.com/orders-producer:latest
+          image: thecloudgarage/orders-producer:latest
           imagePullPolicy: IfNotPresent
           env:
             - name: BOOTSTRAP_SERVERS
-              value: "my-confluent-cp-kafka-headless:9092"
+              value: "kafka.confluent.svc.cluster.local:9071"
             - name: KAFKA_TOPIC
               value: "orders"
             - name: INTERVAL_SECONDS

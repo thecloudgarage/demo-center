@@ -165,7 +165,8 @@ spec:
   externalAccess:
     type: loadBalancer
     loadBalancer:
-      domain: kafkaconnect.example.com
+      domain: example.com
+      prefix: kafkaconnect
   podTemplate:
     resources:
       requests:
@@ -204,7 +205,8 @@ spec:
   externalAccess:
     type: loadBalancer
     loadBalancer:
-      domain: controlcenter.example.com
+      domain: example.com
+      prefix: controlcenter
   podTemplate:
     resources:
       requests:

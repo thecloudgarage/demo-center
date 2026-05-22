@@ -157,7 +157,7 @@ metadata:
 spec:
   replicas: 3
   image:
-    application: thecloudgarage/cp-kafka-connect-mongo-es:latest
+    application: thecloudgarage/kafka-connect-es-mongo:latest
     init: confluentinc/confluent-init-container:3.2.0
   dependencies:
     kafka:

@@ -61,7 +61,7 @@ spec:
   class: "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector"
   taskMax: 2
   connectClusterRef:
-    name: kafka-connect # Must match the metadata.name of your Connect cluster
+    name: corporate-kafka-connect # Must match the metadata.name of your Connect cluster
   configs:
     topics: "orders"
     connection.url: "http://elasticsearch.${ES_SERVICE_HOST}.svc.cluster.local:9200"

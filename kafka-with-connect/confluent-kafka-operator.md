@@ -220,6 +220,15 @@ spec:
 kubectl apply -f cfk-kraft-latest.yaml
 kubectl get pods -n confluent -w
 ```
+Create the orders topic
+```
+kubectl exec -n confluent kafka-0 -- \
+  kafka-topics --bootstrap-server kafka.confluent.svc.cluster.local:9071 \
+  --create \
+  --topic orders \
+  --partitions 3 \
+  --replication-factor 3
+```
 MongoDB connector JSON
 ```
 cat > mongo-sink.json <<EOF

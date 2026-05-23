@@ -2,6 +2,7 @@
 kubectl run -n confluent curl --rm -it --restart=Never \
   --image=curlimages/curl -- sh
 ```
+```
 cat > es-sink.json <<EOF
 {
   "name": "es-sink",

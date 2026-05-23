@@ -22,10 +22,13 @@ spec:
   
   # Fetches the elasticsearch plugin dynamically on boot
   build:
-    confluentHub:
-      - name: kafka-connect-elasticsearch
-        owner: confluentinc
-        version: 14.1.0
+    type: onDemand
+    onDemand:
+      plugins:
+        confluentHub:
+          - name: kafka-connect-elasticsearch
+            owner: confluentinc
+            version: 14.1.0
   
   # EXPOSE VIA EXTERNAL LOADBALANCER
   externalAccess:

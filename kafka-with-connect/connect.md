@@ -12,23 +12,27 @@ ES_SERVICE_HOST=$(kubectl -n elasticsearch get svc "${ES_CLUSTER_NAME}-coord" \
 apiVersion: platform.confluent.io/v1beta1
 kind: Connect
 metadata:
-  name: kafka-connect
+  name: corporate-kafka-connect
   namespace: confluent
 spec:
   replicas: 2
-  # Use official Confluent base images
   image:
     application: confluentinc/cp-server-connect:8.2.0
     init: confluentinc/confluent-init-container:3.2.0
   
-  # Tell the operator to fetch the Elasticsearch plugin automatically
+  # Fetches the elasticsearch plugin dynamically on boot
   build:
-    types:
-      - name: elasticsearch-sink
-        confluentHub:
-          - name: kafka-connect-elasticsearch
-            owner: confluentinc
-            version: 14.1.0  # Or choose your preferred stable plugin version
+    confluentHub:
+      - name: kafka-connect-elasticsearch
+        owner: confluentinc
+        version: 14.1.0
+  
+  # EXPOSE VIA EXTERNAL LOADBALANCER
+  externalAccess:
+    type: loadBalancer
+    loadBalancer:
+      domain: example.com       # Your domain name
+#      prefix: kafkaconnect      # Exposes endpoint at: ://example.com
             
   dependencies:
     kafka:
@@ -41,6 +45,7 @@ spec:
       limits:
         cpu: "2"
         memory: "2Gi"
+
 ```
 ```
 cat <<EOF | kubectl apply -f -

@@ -9,6 +9,101 @@ ES_SERVICE_HOST=$(kubectl -n elasticsearch get svc "${ES_CLUSTER_NAME}-coord" \
   -o jsonpath='{.status.loadBalancer.ingress[0].ip}'; echo)
 ```
 ```
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: connect-pod-overlay
+  namespace: confluent
+data:
+  pod-template.yaml: |
+    spec:
+      containers:
+        - name: connect
+          env:
+            - name: KAFKA_OPTS
+              # This fixes BOTH the Jackson error and the SSL check revocation
+              value: "-Dcom.fasterxml.jackson.core.util.BufferRecyclers.trackReusableBuffers=false -Dcom.sun.net.ssl.checkRevocation=false"
+EOF
+```
+```
+apiVersion: platform.confluent.io/v1beta1
+kind: Connect
+metadata:
+  name: kafka-connect
+  namespace: confluent
+  annotations:
+    # Reference the overlay ConfigMap
+    platform.confluent.io/pod-overlay-configmap-name: connect-pod-overlay
+spec:
+  replicas: 1
+  image:
+    application: confluentinc/cp-server-connect:8.2.0
+    init: confluentinc/confluent-init-container:3.2.0
+
+  # Fetches the elasticsearch plugin dynamically on boot
+  build:
+    type: onDemand
+    onDemand:
+      plugins:
+        confluentHub:
+          - name: kafka-connect-elasticsearch
+            owner: confluentinc
+            version: 15.1.1
+
+  # EXPOSE VIA EXTERNAL LOADBALANCER
+  externalAccess:
+    type: loadBalancer
+    loadBalancer:
+      domain: example.com       # Your domain name
+#      prefix: kafkaconnect      # Exposes endpoint at: ://example.com
+
+  dependencies:
+    kafka:
+      bootstrapEndpoint: kafka.confluent.svc.cluster.local:9092
+  podTemplate:
+    # CFK v1beta1 correct field for probes
+    probe:
+      readiness:
+        initialDelaySeconds: 180
+        periodSeconds: 20
+    # CFK v1beta1 correct field for resources
+    resources:
+      requests:
+        cpu: "1"
+        memory: "4Gi"
+      limits:
+        cpu: "2"
+        memory: "4Gi"
+```
+```
+cat <<EOF | kubectl apply -f -
+apiVersion: platform.confluent.io/v1beta1
+kind: Connector
+metadata:
+  name: elasticsearch-sink-connector
+  namespace: confluent
+spec:
+  class: "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector"
+  taskMax: 2
+  connectClusterRef:
+    name: kafka-connect # Must match the metadata.name of your Connect cluster
+  configs:
+    topics: "orders"
+    connection.url: "http://${ES_SERVICE_HOST}:9200"
+    type.name: "_doc"
+    key.ignore: "true"
+    schema.ignore: "true"
+    elastic.security.protocol: "SSL"
+    elastic.https.ssl.endpoint.identification.algorithm: ""
+    elastic.https.ssl.keystore.type: "JKS"
+    # Optional security configurations if your Elasticsearch cluster uses basic auth:
+    connection.username: "elastic"
+    connection.password: "$ES_PW"
+EOF
+```
+
+```
 apiVersion: platform.confluent.io/v1beta1
 kind: Connect
 metadata:

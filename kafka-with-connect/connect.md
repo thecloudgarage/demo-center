@@ -12,7 +12,7 @@ ES_SERVICE_HOST=$(kubectl -n elasticsearch get svc "${ES_CLUSTER_NAME}-coord" \
 apiVersion: platform.confluent.io/v1beta1
 kind: Connect
 metadata:
-  name: corporate-kafka-connect
+  name: kafka-connect
   namespace: confluent
 spec:
   replicas: 2
@@ -61,7 +61,7 @@ spec:
   class: "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector"
   taskMax: 2
   connectClusterRef:
-    name: corporate-kafka-connect # Must match the metadata.name of your Connect cluster
+    name: kafka-connect # Must match the metadata.name of your Connect cluster
   configs:
     topics: "orders"
     connection.url: "http://elasticsearch.${ES_SERVICE_HOST}.svc.cluster.local:9200"

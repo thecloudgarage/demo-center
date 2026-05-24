@@ -64,7 +64,7 @@ spec:
     name: kafka-connect # Must match the metadata.name of your Connect cluster
   configs:
     topics: "orders"
-    connection.url: "http://elasticsearch.${ES_SERVICE_HOST}.svc.cluster.local:9200"
+    connection.url: "http://elasticsearch.${ES_CLUSTER_NAME}-coord.svc.cluster.local:9200"
     type.name: "_doc"
     key.ignore: "true"
     schema.ignore: "true"

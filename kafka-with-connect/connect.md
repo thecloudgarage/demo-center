@@ -100,6 +100,37 @@ spec:
     # Optional security configurations if your Elasticsearch cluster uses basic auth:
     connection.username: "elastic"
     connection.password: "$ES_PW"
+    value.converter: "org.apache.kafka.connect.json.JsonConverter"
+    value.converter.schemas.enable: "false"
+    
+    # If your message keys are also plain strings/JSON, add these:
+    key.converter: "org.apache.kafka.connect.storage.StringConverter"
+EOF
+```
+```
+cat <<EOF | kubectl apply -f -
+apiVersion: platform.confluent.io/v1beta1
+kind: Connector
+metadata:
+  name: elasticsearch-sink-connector
+  namespace: confluent
+spec:
+  class: "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector"
+  taskMax: 2
+  connectClusterRef:
+    name: kafka-connect # Must match the metadata.name of your Connect cluster
+  configs:
+    topics: "orders"
+    connection.url: "http://${ES_SERVICE_HOST}:9200"
+    type.name: "_doc"
+    key.ignore: "true"
+    schema.ignore: "true"
+    elastic.security.protocol: "SSL"
+    elastic.https.ssl.endpoint.identification.algorithm: ""
+    elastic.https.ssl.keystore.type: "JKS"
+    # Optional security configurations if your Elasticsearch cluster uses basic auth:
+    connection.username: "elastic"
+    connection.password: "$ES_PW"
 EOF
 ```
 

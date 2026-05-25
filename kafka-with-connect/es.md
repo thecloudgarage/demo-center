@@ -67,6 +67,7 @@ spec:
         # Empty role list => coordinating-only node
         node.roles: []
         node.store.allow_mmap: false
+        xpack.security.http.ssl.enabled: false
       podTemplate:
         metadata:
           labels:
@@ -92,6 +93,7 @@ spec:
       config:
         node.roles: ["ingest", "transform", "remote_cluster_client"]
         node.store.allow_mmap: false
+        xpack.security.http.ssl.enabled: false
       podTemplate:
         metadata:
           labels:
@@ -118,6 +120,7 @@ spec:
         node.roles: ["data_hot", "data_content", "ingest", "remote_cluster_client"]
         node.attr.data: "hot"
         node.store.allow_mmap: false
+        xpack.security.http.ssl.enabled: false
       podTemplate:
         metadata:
           labels:
@@ -152,6 +155,7 @@ spec:
         node.roles: ["data_warm", "data_content", "remote_cluster_client"]
         node.attr.data: "warm"
         node.store.allow_mmap: false
+        xpack.security.http.ssl.enabled: false
       podTemplate:
         metadata:
           labels:
@@ -221,7 +225,7 @@ ES_SERVICE_HOST=$(kubectl -n elasticsearch get svc "${ES_CLUSTER_NAME}-coord" \
   -o jsonpath='{.status.loadBalancer.ingress[0].ip}'; echo)
 ```
 ```
-curl -k -u "elastic:${ES_PW}" -X PUT "https://${ES_SERVICE_HOST}:9200/products" \
+curl -k -u "elastic:${ES_PW}" -X PUT "https://${ES_SERVICE_HOST}:9200/test" \
   -H 'Content-Type: application/json' \
   -d '{
     "settings": {
@@ -243,13 +247,7 @@ curl -k -u "elastic:${ES_PW}" -X PUT "https://${ES_SERVICE_HOST}:9200/products" 
     }
   }'
 ```
-Insert products
-```
-curl -k -u "elastic:${ES_PW}" -X POST "https://${ES_SERVICE_HOST}:9200/products/_bulk?refresh=true" \
-  -H 'Content-Type: application/json' \
-  -d '
-{ "index": { "_id": "1" } }
-{ "product_id": "SKU-1001", "name": "Dell 24\" Full HD Monitor", "category": "monitors", "price": 149.99, "in_stock": true,  "tags": ["display","1080p","office"], "created_at": "2025-01-10T10:00:00Z", "description": "24-inch Full HD IPS monitor suitable for productivity workloads." }
+"2025-01-10T10:00:00Z", "description": "24-inch Full HD IPS monitor suitable for productivity workloads." }
 { "index": { "_id": "2" } }
 { "product_id": "SKU-1002", "name": "Dell Wired Keyboard and Mouse Combo", "category": "peripherals", "price": 39.99, "in_stock": true,  "tags": ["keyboard","mouse","bundle"], "created_at": "2025-02-01T09:30:00Z", "description": "Compact wired keyboard and mouse combo for everyday office use." }
 { "index": { "_id": "3" } }

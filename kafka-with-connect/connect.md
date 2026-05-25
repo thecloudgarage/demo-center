@@ -148,3 +148,8 @@ spec:
     key.projection.type: "none"
 EOF
 ```
+CONNECTOR STATUS
+```
+CONNECT_CLUSTER_NAME=kafka-connect
+CONNECT_SERVICE_HOST=$(kubectl -n confluent get svc "${CONNECT_CLUSTER_NAME}-bootstrap-lb" \
+  -o jsonpath='{.status.loadBalancer.ingress[0].ip}'; echo)

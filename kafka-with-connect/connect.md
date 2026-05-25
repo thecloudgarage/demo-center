@@ -50,6 +50,10 @@ spec:
           - name: kafka-connect-elasticsearch
             owner: confluentinc
             version: 15.1.1
+          # ADDED: MongoDB Connector
+          - name: kafka-connect-mongodb
+            owner: mongodb
+            version: 1.13.0
 
   # EXPOSE VIA EXTERNAL LOADBALANCER
   externalAccess:

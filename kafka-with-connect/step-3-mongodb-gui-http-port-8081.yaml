@@ -27,9 +27,9 @@ spec:
 
             # 2. Authentication (Use the same credentials as your connector)
             - name: ME_CONFIG_MONGODB_ADMINUSERNAME
-              value: "mongo_user" # Replace with your mongo username
+              value: "mongo-user" # Replace with your mongo username
             - name: ME_CONFIG_MONGODB_ADMINPASSWORD
-              value: "mongo_password" # Replace with your mongo password
+              value: "mongo-password" # Replace with your mongo password
 
             # 3. GUI Login Credentials (for the web browser)
             - name: ME_CONFIG_BASICAUTH_USERNAME

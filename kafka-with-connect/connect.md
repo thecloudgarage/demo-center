@@ -153,3 +153,6 @@ CONNECTOR STATUS
 CONNECT_CLUSTER_NAME=kafka-connect
 CONNECT_SERVICE_HOST=$(kubectl -n confluent get svc "${CONNECT_CLUSTER_NAME}-bootstrap-lb" \
   -o jsonpath='{.status.loadBalancer.ingress[0].ip}'; echo)
+#Replace the connector name in the below command
+curl http://${CONNECT_SERVICE_HOST}/connectors/mongodb-sink-connector/status
+```

@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-express
+  namespace: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-express
+  template:
+    metadata:
+      labels:
+        app: mongo-express
+    spec:
+      containers:
+        - name: mongo-express
+          image: mongo-express:latest
+          ports:
+            - containerPort: 8081
+          env:
+            # 1. Connection to your MongoDB Service
+            - name: ME_CONFIG_MONGODB_SERVER
+              value: "mongodb.mongodb.svc.cluster.local"
+            - name: ME_CONFIG_MONGODB_PORT
+              value: "27017"
+
+            # 2. Authentication (Use the same credentials as your connector)
+            - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+              value: "mongo_user" # Replace with your mongo username
+            - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+              value: "mongo_password" # Replace with your mongo password
+
+            # 3. GUI Login Credentials (for the web browser)
+            - name: ME_CONFIG_BASICAUTH_USERNAME
+              value: "admin"
+            - name: ME_CONFIG_BASICAUTH_PASSWORD
+              value: "pass123"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-express-service
+  namespace: mongodb
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8081
+      targetPort: 8081
+  selector:
+    app: mongo-express

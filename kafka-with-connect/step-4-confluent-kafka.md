@@ -179,6 +179,7 @@ spec:
         cpu: "1"
         memory: "1Gi"```
 ```
+```
 kubectl apply -f cfk-kraft-latest.yaml
 kubectl get pods -n confluent -w
 ```

@@ -213,6 +213,9 @@ spec:
     service:
       spec:
         type: LoadBalancer
+    tls:
+      selfSignedCertificate:
+        disabled: true
 ```
 ```
 ES_CLUSTER_NAME=$(kubectl get elasticsearch -n elasticsearch single-es \

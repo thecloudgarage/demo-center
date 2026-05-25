@@ -126,7 +126,7 @@ spec:
     name: kafka-connect 
   configs:
     topics: "orders"
-    connection.uri: "mongodb://mongo_user:mongo_password@mongodb.mongodb.svc.cluster.local:27017"
+    connection.uri: "mongodb://mongo-user:mongo-pass@mongodb.mongodb.svc.cluster.local:27017"
     database: "inventory"
     collection: "orders_sink"
 

@@ -156,8 +156,17 @@ CONNECT_SERVICE_HOST=$(kubectl -n confluent get svc "${CONNECT_CLUSTER_NAME}-boo
 #Replace the connector name in the below command
 curl http://${CONNECT_SERVICE_HOST}/connectors/elasticsearch-sink-connector/status | jq
 curl http://${CONNECT_SERVICE_HOST}/connectors/mongodb-sink-connector/status | jq
-#To view the individual tasks and the partitions that it is reading from
+#To view the the partitions that are being consumed by connectors
 curl http://${CONNECT_SERVICE_HOST}/connectors/elasticsearch-sink-connector/offsets | jq
 curl http://${CONNECT_SERVICE_HOST}/connectors/mongodb-sink-connector/offsets | jq
+#To view exact assignment of connector tasks and partitions they are reading from
 #
+kubectl exec -it kafka-connect-0 -n confluent -- kafka-consumer-groups \
+  --bootstrap-server kafka.confluent.svc.cluster.local:9092 \
+  --describe --group connect-elasticsearch-sink-connector
+#
+kubectl exec -it kafka-connect-0 -n confluent -- kafka-consumer-groups \
+  --bootstrap-server kafka.confluent.svc.cluster.local:9092 \
+  --describe --group connect-mongodb-sink-connector
+
 ```

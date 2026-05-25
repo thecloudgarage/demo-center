@@ -107,7 +107,7 @@ spec:
     init: confluentinc/confluent-init-container:3.2.0
   dependencies:
     kafka:
-      bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071
+      bootstrapEndpoint: kafka.confluent.svc.cluster.local:9092
   podTemplate:
     resources:
       requests:
@@ -133,7 +133,7 @@ spec:
     name: longhorn
   dependencies:
     kafka:
-      bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071
+      bootstrapEndpoint: kafka.confluent.svc.cluster.local:9092
   podTemplate:
     resources:
       requests:
@@ -147,43 +147,6 @@ spec:
       - ksql.streams.replication.factor=3
       - ksql.sink.replicas=3
       - ksql.internal.topic.replicas=3
-
----
-apiVersion: platform.confluent.io/v1beta1
-kind: Connect
-metadata:
-  name: connect
-  namespace: confluent
-spec:
-  replicas: 3
-  image:
-    application: thecloudgarage/kafka-connect-es-mongo:latest
-    init: confluentinc/confluent-init-container:3.2.0
-  dependencies:
-    kafka:
-      bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071
-  externalAccess:
-    type: loadBalancer
-    loadBalancer:
-      domain: example.com
-      prefix: kafkaconnect
-  podTemplate:
-    resources:
-      requests:
-        cpu: "1"
-        memory: "512Mi"
-      limits:
-        cpu: "2"
-        memory: "1Gi"
-  configOverrides:
-    server:
-      - config.storage.replication.factor=3
-      - offset.storage.replication.factor=3
-      - status.storage.replication.factor=3
-      - key.converter=org.apache.kafka.connect.storage.StringConverter
-      - value.converter=org.apache.kafka.connect.json.JsonConverter
-      - value.converter.schemas.enable=false
-      - plugin.path=/usr/share/java,/usr/share/confluent-hub-components
 
 ---
 apiVersion: platform.confluent.io/v1beta1
@@ -201,12 +164,12 @@ spec:
     name: longhorn
   dependencies:
     kafka:
-      bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071
+      bootstrapEndpoint: kafka.confluent.svc.cluster.local:9092
   externalAccess:
     type: loadBalancer
     loadBalancer:
       domain: example.com
-      prefix: controlcenter
+ #     prefix: controlcenter (if prefix is not provided, then the endpoint defaults to controlcenter.example.com)
   podTemplate:
     resources:
       requests:
@@ -214,8 +177,7 @@ spec:
         memory: "512Mi"
       limits:
         cpu: "1"
-        memory: "1Gi"
-```
+        memory: "1Gi"```
 ```
 kubectl apply -f cfk-kraft-latest.yaml
 kubectl get pods -n confluent -w

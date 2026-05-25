@@ -154,5 +154,10 @@ CONNECT_CLUSTER_NAME=kafka-connect
 CONNECT_SERVICE_HOST=$(kubectl -n confluent get svc "${CONNECT_CLUSTER_NAME}-bootstrap-lb" \
   -o jsonpath='{.status.loadBalancer.ingress[0].ip}'; echo)
 #Replace the connector name in the below command
-curl http://${CONNECT_SERVICE_HOST}/connectors/mongodb-sink-connector/status
+curl http://${CONNECT_SERVICE_HOST}/connectors/elasticsearch-sink-connector/status | jq
+curl http://${CONNECT_SERVICE_HOST}/connectors/mongodb-sink-connector/status | jq
+#To view the individual tasks and the partitions that it is reading from
+curl http://${CONNECT_SERVICE_HOST}/connectors/elasticsearch-sink-connector/offsets | jq
+curl http://${CONNECT_SERVICE_HOST}/connectors/mongodb-sink-connector/offsets | jq
+#
 ```

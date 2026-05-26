@@ -177,7 +177,7 @@ spec:
         memory: "512Mi"
       limits:
         cpu: "1"
-        memory: "1Gi"```
+        memory: "1Gi"
 ```
 ```
 kubectl apply -f cfk-kraft-latest.yaml

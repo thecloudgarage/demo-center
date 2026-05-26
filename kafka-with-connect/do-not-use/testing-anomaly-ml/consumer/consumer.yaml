@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-consumer-ml
+  namespace: kafka-ml
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders-consumer-ml
+  template:
+    metadata:
+      labels:
+        app: orders-consumer-ml
+    spec:
+      containers:
+        - name: consumer
+          image: your-registry/orders-consumer-ml:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: BOOTSTRAP_SERVERS
+              value: "kafka.confluent.svc.cluster.local:9071"
+            - name: KAFKA_TOPIC
+              value: "orders"
+            - name: ANOMALY_TOPIC
+              value: "anomaly-orders"
+            - name: GROUP_ID
+              value: "orders-ml-consumer"
+            - name: WINDOW_SIZE
+              value: "300"
+            - name: MIN_TRAIN_SIZE
+              value: "50"
+            - name: RETRAIN_EVERY
+              value: "25"
+            - name: CONTAMINATION
+              value: "0.05"
+            - name: ANOMALY_THRESHOLD
+              value: "-0.02"
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+```

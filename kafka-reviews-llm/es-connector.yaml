@@ -1,0 +1,32 @@
+apiVersion: platform.confluent.io/v1beta1
+kind: Connector
+metadata:
+  name: raw-product-reviews-to-elasticsearch
+  namespace: review-ai
+spec:
+  class: io.confluent.connect.elasticsearch.ElasticsearchSinkConnector
+  taskMax: 1
+  connectClusterRef:
+    name: YOUR_CONNECT_CLUSTER_NAME
+  configs:
+    topics: product-reviews
+
+    connection.url: https://YOUR_ELASTICSEARCH_HOST:9200
+    connection.username: YOUR_ES_USERNAME
+    connection.password: YOUR_ES_PASSWORD
+
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    value.converter: org.apache.kafka.connect.json.JsonConverter
+    value.converter.schemas.enable: "false"
+
+    schema.ignore: "true"
+    key.ignore: "false"
+    write.method: UPSERT
+    behavior.on.null.values: IGNORE
+    topic.index.map: product-reviews:raw-product-reviews
+
+    transforms: createKey,extractKey
+    transforms.createKey.type: org.apache.kafka.connect.transforms.ValueToKey
+    transforms.createKey.fields: review_id
+    transforms.extractKey.type: org.apache.kafka.connect.transforms.ExtractField$Key
+    transforms.extractKey.field: review_id

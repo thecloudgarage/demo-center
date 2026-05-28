@@ -174,10 +174,10 @@ spec:
     resources:
       requests:
         cpu: "500m"
-        memory: "512Mi"
+        memory: "1Gi"
       limits:
         cpu: "1"
-        memory: "1Gi"
+        memory: "2Gi"
 ```
 ```
 kubectl apply -f cfk-kraft-latest.yaml
